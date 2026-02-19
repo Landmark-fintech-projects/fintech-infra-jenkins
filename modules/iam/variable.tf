@@ -21,7 +21,7 @@ variable "cluster_name" {
 }
 
 variable "eks_oidc_provider" {
-  description = "EKS OIDC provider (e.g. oidc.eks.us-east-2.amazonaws.com/id/EXAMPLED539D4633E53DE1B716D3041E)"
+  description = "EKS OIDC provider (e.g. oidc.eks.us-east-1.amazonaws.com/id/EXAMPLED539D4633E53DE1B716D3041E)"
   type        = string
 }
 

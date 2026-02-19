@@ -150,7 +150,7 @@ Example S3 + DynamoDB backend (backend.tf):
 terraform {
   backend "s3" {
     bucket         = "your-tf-state-bucket"
-    region         = "us-east-2"
+    region         = "us-east-1"
     dynamodb_table = "your-tf-locks"
     encrypt        = true
   }
@@ -184,7 +184,7 @@ Add parameters:
 
 ENVIRONMENT → dev, qa, uat, prod
 
-REGION → e.g., us-east-2
+REGION → e.g., us-east-1
 
 ACTION → apply | destroy
 
@@ -194,7 +194,7 @@ ASSUME_ROLE_ARN → optional
 🧱 7. Pipeline Parameters
 Parameter	Description	Default
 ENVIRONMENT	Target environment directory	dev
-REGION	AWS region	us-east-2
+REGION	AWS region	us-east-1
 ACTION	Terraform action (apply or destroy)	apply
 ASSUME_ROLE_ARN	ARN of IAM Role to assume	(optional)
 

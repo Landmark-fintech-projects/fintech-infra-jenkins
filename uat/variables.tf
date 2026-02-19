@@ -5,7 +5,7 @@
 
 variable "main-region" {
   type    = string
-  default = "us-east-2"
+  default = "us-east-1"
 }
 
 
@@ -20,7 +20,7 @@ variable "cluster_name" {
 
 variable "rolearn" {
   description = "Add admin role to the aws-auth configmap"
-  default     = "arn:aws:iam::327019199684:role/terraform-create-role"
+  default     = "arn:aws:iam::805703880776:role/terraform-create-role"
 }
 
 # ################################################################################
@@ -79,7 +79,7 @@ variable "san_domains" {
 variable "route53_zone_id" {
   description = "Route 53 Hosted Zone ID"
   type        = string
-  default     = "ZC7WDABJDII2" # Replace with actual Route 53 Zone ID
+  default     = "Z07155713A5AEXZCERRLH" # Replace with actual Route 53 Zone ID
 }
 
 
@@ -87,7 +87,7 @@ variable "route53_zone_id" {
 
 variable "aws_account_id" {
   description = "AWS Account ID"
-  default     = "327019199684"
+  default     = "805703880776"
 }
 
 variable "repositories" {
