@@ -69,7 +69,7 @@ module "eks-client-node" {
     sudo apt-get install -y terraform
 
     echo "Installing kubectl for Amazon EKS..."
-    curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.31.3/2024-12-12/bin/linux/amd64/kubectl
+    curl -O https://s3.us-east-1.amazonaws.com/amazon-eks/1.31.3/2024-12-12/bin/linux/amd64/kubectl
     chmod +x ./kubectl
     mkdir -p "$HOME/bin"
     cp ./kubectl "$HOME/bin/kubectl"

@@ -11,13 +11,13 @@ variable "aws_account_id" {
 variable "aws_region" {
   description = "AWS Region used for deployments"
   type        = string
-  default     = "us-west-2"
+  default     = "us-east-1"
 }
 
 variable "main_region" {
   description = "Primary region for VPC and global resources"
   type        = string
-  default     = "us-west-2"
+  default     = "us-east-1"
 }
 
 ################################################################################

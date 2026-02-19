@@ -86,7 +86,7 @@ module "eks-client-node" {
   apt-get install -y terraform
 
   echo "Installing kubectl..."
-  curl -LO https://s3.us-west-2.amazonaws.com/amazon-eks/1.31.3/2024-12-12/bin/linux/amd64/kubectl
+  curl -LO https://s3.us-east-1.amazonaws.com/amazon-eks/1.31.3/2024-12-12/bin/linux/amd64/kubectl
   install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
   echo "Installing Docker CE..."
