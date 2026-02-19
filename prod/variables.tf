@@ -46,7 +46,7 @@ variable "tags" {
 variable "cluster_name" {
   description = "Name of the EKS cluster"
   type        = string
-  default     = "prod-dominion-cluster"
+  default     = "prod-auggie-cluster"
 }
 
 variable "rolearn" {
@@ -75,7 +75,7 @@ variable "instance_type" {
 variable "key_name" {
   description = "EC2 Key Pair name for SSH access"
   type        = string
-  default     = "Oregon-private-key"
+  default     = "DevOps_Train2024"
 }
 
 ################################################################################
@@ -85,7 +85,7 @@ variable "key_name" {
 variable "domain_name" {
   description = "Primary domain name for certificate issuance"
   type        = string
-  default     = "*.shollztech.com"
+  default     = "shollztech.com"
 }
 
 variable "san_domains" {

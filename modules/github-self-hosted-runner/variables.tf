@@ -13,7 +13,7 @@ variable "instance_type" {
 variable "key_name" {
   description = "The key name for the Jenkins server"
   type        = string
-  default     = "Oregon-private-key"
+  default     = "DevOps_Train2024"
 }
 
 variable "main_region" {
