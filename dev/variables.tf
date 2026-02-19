@@ -111,7 +111,7 @@ variable "repositories" {
 }
 
 ################################################################################
-# Kubernetes Namespaces (for add-ons or app grouping)
+# Kubernetes Namespaces (for add-ons or app grouping).
 ################################################################################
 
 variable "namespaces" {
