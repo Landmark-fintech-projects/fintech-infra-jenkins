@@ -84,6 +84,24 @@ pipeline {
 
           # CloudWatch Log Group
           aws logs delete-log-group --log-group-name /aws/eks/prod-auggie-cluster/cluster || true
+
+          # -------------------------------
+          # Elastic IP cleanup & reuse
+          # -------------------------------
+          echo "🔄 Checking for existing EIP tagged for $TF_ENV"
+          EXISTING_EIP=$(aws ec2 describe-addresses --region $AWS_REGION --query "Addresses[?Tags[?Key=='Environment' && Value=='$TF_ENV']].AllocationId | [0]" --output text)
+          if [ "$EXISTING_EIP" != "None" ]; then
+            echo "Found existing EIP: $EXISTING_EIP"
+            ASSOCIATION_ID=$(aws ec2 describe-addresses --region $AWS_REGION --allocation-ids $EXISTING_EIP --query "Addresses[0].AssociationId" --output text)
+            if [ "$ASSOCIATION_ID" != "None" ]; then
+              echo "Disassociating EIP $EXISTING_EIP..."
+              aws ec2 disassociate-address --association-id $ASSOCIATION_ID --region $AWS_REGION
+            else
+              echo "EIP is not associated. Ready to reuse."
+            fi
+          else
+            echo "No existing EIP found. Terraform will allocate a new one."
+          fi
         '''
       }
     }
