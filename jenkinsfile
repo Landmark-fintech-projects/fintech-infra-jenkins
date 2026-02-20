@@ -24,20 +24,25 @@ pipeline {
   }
 
   stages {
+
     stage('Checkout') {
       steps {
         checkout scm
-        script { echo "Branch: ${env.BRANCH_NAME ?: 'N/A'} | PR: ${env.CHANGE_ID ?: 'no'}" }
+        script { 
+          echo "Branch: ${env.BRANCH_NAME ?: 'N/A'} | PR: ${env.CHANGE_ID ?: 'no'}" 
+        }
       }
     }
 
     stage('WhoAmI') {
       steps {
+        echo '🔎 Verifying AWS credentials used by Jenkins'
         sh '''
           set -e
-          aws --version || true
-          echo "Base identity (instance profile):"
-          aws sts get-caller-identity || true
+          echo "AWS CLI version:"
+          aws --version
+          echo "Current IAM identity:"
+          aws sts get-caller-identity
         '''
       }
     }
@@ -47,7 +52,38 @@ pipeline {
         sh '''
           set -e
           mkdir -p .terraform.d/plugin-cache
-          terraform version || true
+          terraform version
+        '''
+      }
+    }
+
+    stage('Cleanup Existing Resources') {
+      when { expression { params.ACTION != 'plan' } } // Only cleanup for apply/destroy
+      steps {
+        echo '🧹 Cleaning up any existing conflicting AWS resources'
+        sh '''
+          set -e
+          
+          # IAM Roles
+          aws iam delete-role --role-name eks-client-ssm-role || true
+          aws iam delete-role --role-name prod-GitHubActionsECR || true
+
+          # IAM Policies
+          aws iam delete-policy --policy-arn arn:aws:iam::${AWS_ACCOUNT_ID}:policy/EKSClientEKSAccessPolicy || true
+          aws iam delete-policy --policy-arn arn:aws:iam::${AWS_ACCOUNT_ID}:policy/prod-GitHubECRPolicy || true
+          aws iam delete-policy --policy-arn arn:aws:iam::${AWS_ACCOUNT_ID}:policy/prod-GitHubEKSPolicy || true
+
+          # IAM Instance Profiles
+          aws iam delete-instance-profile --instance-profile-name eks-client-ssm-profile || true
+
+          # OIDC Provider
+          aws iam delete-open-id-connect-provider --open-id-connect-provider-arn arn:aws:iam::${AWS_ACCOUNT_ID}:oidc-provider/token.actions.githubusercontent.com || true
+
+          # KMS Alias
+          aws kms delete-alias --alias-name alias/eks/prod-auggie-cluster || true
+
+          # CloudWatch Log Group
+          aws logs delete-log-group --log-group-name /aws/eks/prod-auggie-cluster/cluster || true
         '''
       }
     }
@@ -60,8 +96,7 @@ pipeline {
           export TF_PLUGIN_CACHE_DIR=\\"$TF_PLUGIN_CACHE_DIR\\"
           terraform fmt -check -recursive
           terraform init -upgrade -backend-config=\\"key=$TF_ENV/terraform.tfstate\\" -lock-timeout=5m
-          terraform validate -no-color
-          aws sts get-caller-identity"
+          terraform validate -no-color"
         '''
       }
     }
@@ -125,6 +160,7 @@ pipeline {
         }
       }
     }
+
   }
 
   post {
